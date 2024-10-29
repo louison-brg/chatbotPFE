@@ -10,17 +10,22 @@ function sendMessage() {
     userMessage.textContent = 'Vous : ' + userInput;
     chatOutput.appendChild(userMessage);
 
-    // Send message to Flask server at the /chat endpoint
-    fetch('http://localhost:5000/chat', {
+    // Send message to FastAPI server at the /chat endpoint
+    fetch('http://127.0.0.1:8000/chat', {
         method: 'POST',
+        mode: 'cors',
         headers: {
-            'Content-Type': 'application/json' // Specify JSON content type
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userInput })  // Send user input as JSON
+        body: JSON.stringify({ message: userInput })
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok'); // Check for response errors
+            // Log the status and error details for debugging
+            console.error('Error response status:', response.status);
+            return response.json().then(errData => {
+                throw new Error('Network response was not ok: ' + JSON.stringify(errData));
+            });
         }
         return response.json();  // Parse the JSON from the response
     })
