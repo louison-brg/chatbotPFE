@@ -62,6 +62,29 @@ body {
     text-align: justify
 }
 
+.bot-loading {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    align-self: flex-start;
+    text-align: justify;
+    animation: fadeColor 3s ease-in-out infinite; /* Infinite fade effect */
+}
+
+/* Keyframes for changing the background color */
+@keyframes fadeColor {
+    0% {
+        background-color: #e0e0e0; /* Start at light gray */
+    }
+    50% {
+        background-color: #fafafa; /* Midway, change to white */
+    }
+    100% {
+        background-color: #e0e0e0; /* End back at light gray */
+    }
+}
+
 /* Conteneur de l'entrée utilisateur */
 #chat-input {
     display: flex;
