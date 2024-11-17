@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 # Initialize the Ollama model
-MODEL = "llama3.2"
+MODEL = "phi3"
 model = Ollama(model=MODEL, temperature=0)
 
 app.add_middleware(
@@ -17,7 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Define the request model
 class ChatRequest(BaseModel):
