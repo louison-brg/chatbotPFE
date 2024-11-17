@@ -7,7 +7,7 @@ function sendMessage() {
     let chatOutput = document.getElementById('chat-output');
     let userMessage = document.createElement('div');
     userMessage.className = 'user-message';
-    userMessage.textContent = 'Vous : ' + userInput;
+    userMessage.textContent = 'You : ' + userInput;
     chatOutput.appendChild(userMessage);
 
     // Send message to FastAPI server at the /chat endpoint
