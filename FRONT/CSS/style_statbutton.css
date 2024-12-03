@@ -1,0 +1,55 @@
+
+.start-button {
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  fill: #000;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: -.8px;
+  line-height: 24px;
+  min-width: 140px;
+  outline: 0;
+  padding: 0 17px;
+  text-align: center;
+  text-decoration: none;
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.start-button:focus {
+  color: #171e29;
+}
+
+.start-button:hover {
+  border-color: #06f;
+  color: #06f;
+  fill: #06f;
+}
+
+.start-button:active {
+  border-color: #06f;
+  color: #06f;
+  fill: #06f;
+}
+
+@media (min-width: 768px) {
+  .start-button {
+    min-width: 170px;
+  }
+}
+
+#start-button {
+  bottom: 20px;
+  right: 20px;
+  position: fixed;
+}
