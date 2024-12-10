@@ -71,19 +71,25 @@ body {
     border-radius: 10px;
     align-self: flex-start;
     text-align: justify;
-    animation: fadeColor 3s ease-in-out infinite; /* Infinite fade effect */
+    animation: fadeColor 3s ease-in-out infinite;
+    /* Infinite fade effect */
 }
 
 /* Keyframes for changing the background color */
 @keyframes fadeColor {
     0% {
-        background-color: #e0e0e0; /* Start at light gray */
+        background-color: #e0e0e0;
+        /* Start at light gray */
     }
+
     50% {
-        background-color: #fafafa; /* Midway, change to white */
+        background-color: #fafafa;
+        /* Midway, change to white */
     }
+
     100% {
-        background-color: #e0e0e0; /* End back at light gray */
+        background-color: #e0e0e0;
+        /* End back at light gray */
     }
 }
 
@@ -116,6 +122,18 @@ body {
 
 #send_button:hover {
     background-color: #0056b3;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Responsivité - ajustements pour les petits écrans */
