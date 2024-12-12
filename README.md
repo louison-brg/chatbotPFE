@@ -5,14 +5,6 @@ This guide will walk you through the setup process for the ChatbotPFE project.
 You will install Ollama, create a Conda virtual environment, install necessary dependencies, 
 and run the required servers for the project.
 
-
-
-
-## Demo :
-
-(.gif ultérieurment de ce à quoi le projet ressemble)
-
-
 ## Pre-requieres :
 
 #### 1. Install Ollama :
