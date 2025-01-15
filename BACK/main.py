@@ -49,7 +49,7 @@ async def chat(request: ChatRequest):
         faq_response = retrieve_relevant_document(user_input, vector_store)
 
         # Combine FAQ response with user input
-        prompt_with_context = f"Context from FAQ:\n{faq_response}\n\nUser: {user_input}\nAssistant:"
+        prompt_with_context = f"Context from FAQ:\n{faq_response}\n\nUser: {user_input}\nAssistant: Please answer concisely and go straight to the main point."
 
         # Generate a response using the Ollama model
         response = model.invoke(prompt_with_context)
