@@ -1,4 +1,3 @@
-
 # ChatbotPFE
 
 This guide will walk you through the setup process for the ChatbotPFE project.
@@ -16,6 +15,7 @@ If you don't have Conda installed, download and install Anaconda : https://www.a
 
 ## Installation :
 
+### Chatbot :
 #### 1. Create a new Conda environment :
 - Create a new Conda environnement named chatbotPFE :
 ```bash
@@ -40,12 +40,11 @@ git clone https://github.com/Pyveslefebvre/chatbotPFE.git
   pip install -r requirements.txt
 ```
 
-#### 3. Pull Ollama model :
+#### 3. Pull Ollama models :
 - Pull phi3 model (the model we're using in our project) :
 ```bash
   ollama pull phi3
 ```
-
 ## RUN :
 
 - Run Ollama server :
@@ -65,6 +64,30 @@ Open 'chat.html' in your browser.
 #### Testing the Setup :
 Ollama Server: http://localhost:11434  
 FastAPI Server: http://localhost:8000/docs
+
+### LightRAG :
+
+#### 1. Pull Ollama models :
+- Pull qwen2 model (the model we're using for our lightRAG) :
+```bash
+  ollama pull qwen2
+```
+- Pull nomic-embed-text (the embeding model used for our lightRAG) :
+```bash
+  ollama pull nomic-embed-text
+```
+## RUN
+
+- Download a text file (.txt) which you save in the lightrag directory as "book.txt"
+- Execute lighrag_ollama.py
+```bash
+  python .\BACK\LightRAG\lighrag_ollama.py
+```
+- Execute graph_visual.py
+```bash
+  python .\BACK\LightRAG\graph_visual.py
+```
+
 ## Authors
 
 - [@pyveslefebvre](https://www.github.com/pyveslefebvre)
