@@ -79,9 +79,9 @@ FastAPI Server: http://localhost:8000/docs
 ## RUN
 
 - Download a text file (.txt) which you save in the lightrag directory as "book.txt"
-- Execute lighrag_ollama.py
+- Execute lightrag_ollama.py
 ```bash
-  python .\BACK\LightRAG\lighrag_ollama.py
+  python .\BACK\LightRAG\lightrag_ollama.py
 ```
 - Execute graph_visual.py
 ```bash
