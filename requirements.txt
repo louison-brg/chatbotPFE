@@ -15,4 +15,14 @@ typing-extensions==4.12.2
 tzdata==2024.1
 fastapi[standard]==0.115.5
 langchain-ollama==0.2.1
-chromadb==0.5.23
+tokenizers>=0.13.2,<0.22
+chromadb==0.6.3
+aioboto3==13.4.0
+torch==2.5.1
+openai==1.60.0
+transformers==4.48.1
+tiktoken==0.8.0
+nano_vectordb==0.0.4.3
+pyvis==0.3.2
+
+
