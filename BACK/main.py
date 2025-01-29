@@ -1,3 +1,5 @@
+import argparse
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from langchain_community.llms.ollama import Ollama
 from pydantic import BaseModel
@@ -5,7 +7,21 @@ from typing import List, Dict
 from fastapi.middleware.cors import CORSMiddleware
 from rag import initialize_rag_pipeline, retrieve_relevant_document
 
+# Parse command-line arguments for custom options
+parser = argparse.ArgumentParser(description="FastAPI Chatbot with RAG system")
+parser.add_argument(
+    "--qa",
+    type=str,
+    required=True,  # Make it required
+    help="Path to the qa to be used."
+)
+args = parser.parse_args()
+
+# Initialize the application
 app = FastAPI()
+
+# Use the --qa argument value for the JSON file path
+JSON_FILE_PATH = args.qa
 
 # Initialize the Ollama model
 MODEL = "phi3"
@@ -21,7 +37,6 @@ app.add_middleware(
 )
 
 # Initialize the RAG system
-JSON_FILE_PATH = "./BACK/prepared_dataset.json"  # Path to your dataset
 vector_store = initialize_rag_pipeline(JSON_FILE_PATH)
 
 # Store conversation history in memory for the current session
@@ -63,3 +78,6 @@ async def chat(request: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
+# Start the app with uvicorn
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

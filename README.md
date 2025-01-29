@@ -1,23 +1,22 @@
 # ChatbotPFE
 
-This guide will walk you through the setup process for the ChatbotPFE project.
-You will install Ollama, create a Conda virtual environment, install necessary dependencies, 
-and run the required servers for the project.
+This guide will walk you through the setup process for the **ChatbotPFE** project. You will install **Ollama**, create a Conda virtual environment, install necessary dependencies, and run the required servers for the project.
 
-## Pre-requieres :
+## Prerequisites
 
-#### 1. Install Ollama :
-Download the installer and follow the on-screen instructions to complete the installation :  
-https://ollama.com/download/windows
+#### 1. Install Ollama:
+Download the installer and follow the on-screen instructions to complete the installation of **Ollama**:  
+[Download Ollama](https://ollama.com/download/windows)
 
-#### 2. Install Conda :
-If you don't have Conda installed, download and install Anaconda : https://www.anaconda.com/products/individual 
+#### 2. Install Conda:
+If you don't have Conda installed, download and install **Anaconda**:  
+[Download Anaconda](https://www.anaconda.com/products/individual)
 
-## Installation :
 
-### Chatbot :
+## Installation
+
 #### 1. Create a new Conda environment :
-- Create a new Conda environnement named chatbotPFE :
+- Create a new Conda environment named `chatbotPFE` :
 ```bash
 conda create --name chatbotPFE python=3.10
 ```
@@ -26,74 +25,82 @@ conda create --name chatbotPFE python=3.10
 conda activate chatbotPFE
 ```
 
-#### 2. Clone the project and dependencies :
+#### 2. Clone the project and install dependencies :
 - Clone the project :
 ```bash
 git clone https://github.com/Pyveslefebvre/chatbotPFE.git
-```   
-- Go to the project directory :
+```
+- Navigate to the project directory :
 ```bash
-  cd chatbotPFE
+cd chatbotPFE
 ```
 - Install dependencies :
 ```bash
-  pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-#### 3. Pull Ollama models :
-- Pull phi3 model (the model we're using in our project) :
+## Ollama Models :
+- Pull the **phi3** model:
+This model is used by our chatbot and to generate Q&A.
 ```bash
-  ollama pull phi3
+ollama pull phi3
 ```
-## RUN :
+- Pull the **qwen2** model :
+This model is used by our **LightRAG** system.
+```bash
+ollama pull qwen2
+```
+- Pull the **nomic-embed-text** model :
+This model is used by our **LightRAG** system.
+```bash
+ollama pull nomic-embed-text
+```
+*You can use other models if you want, but keep in mind that you’ll need to update the code wherever the model is used.*
 
-- Run Ollama server :
-```bash
-  ollama serve
-```
-- Run FastAPI server :
-```bash
-  fastapi dev .\BACK\main.py --reload --port 8000
-```
-- Run the frontend :
-Open 'chat.html' in your browser.  
+## Run :
 
-- Chat with the bot :
-...
+### 1. **LightRAG** :
+Here we want to use an unstructured text file (.txt) to generate Q&A ().json), which will then be used by our Chatbot in the **RAG** system.
 
-#### Testing the Setup :
-Ollama Server: http://localhost:11434  
-FastAPI Server: http://localhost:8000/docs
+If you already have a .json file with your Q&A, you can skip this step.
 
-### LightRAG :
+- Download a text file (.txt) and save it in `./BACK/datasets/`
+- Start the **Ollama** server :
+```bash
+ollama serve
+```
+- Execute **LightRAG** :
+```bash
+python ./BACK/LightRAG/lightrag_ollama.py --path ./BACK/datasets/*name_of_your_document.txt*
+```
 
-#### 1. Pull Ollama models :
-- Pull qwen2 model (the model we're using for our lightRAG) :
-```bash
-  ollama pull qwen2
-```
-- Pull nomic-embed-text (the embeding model used for our lightRAG) :
-```bash
-  ollama pull nomic-embed-text
-```
-## RUN
+This will generate a Q&A .json file in `./BACK/datasets/qa/`.
 
-- Download a text file (.txt) and save it in .\BACK\datasets\
-- Start ollama serve
+### 2. **Chatbot** :
+Once you have the Q&A in .json format, you can launch your chatbot.
+
+- Run **Ollama** server:
+If the server has stopped, launch it again:
 ```bash
-  ollama serve
+ollama serve
 ```
-- Execute lightrag_ollama.py
+
+- Run the **FastAPI** server :
+Here you can change your Q&A just by specifying another file.
 ```bash
-  python .\BACK\LightRAG\lightrag_ollama.py --path .\BACK\datasets\*name_of_your_document.txt"
+python ./BACK/main.py --qa ./BACK/datasets/qa/*name_of_your_document.json*
 ```
-- Execute graph_visual.py
-```bash
-  python .\BACK\LightRAG\graph_visual.py
-```
+
+- Open the frontend :
+Open `chat.html` in your browser.
+
+- Chat with the bot:
+
+#### Testing the Setup:
+- **Ollama Server**: [http://localhost:11434](http://localhost:11434)  
+- **FastAPI Server**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ## Authors
 
 - [@pyveslefebvre](https://www.github.com/pyveslefebvre)
 - [@louison-brg](https://www.github.com/louison-brg)
-
