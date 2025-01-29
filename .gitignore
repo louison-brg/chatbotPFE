@@ -711,7 +711,7 @@ FodyWeavers.xsd
 
 #LightRAG
 dickens/
-book.txt
+rawDocument.txt
 lightrag-dev/
 local_neo4jWorkDir/
 neo4jWorkDir/
