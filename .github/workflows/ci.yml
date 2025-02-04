@@ -1,6 +1,5 @@
 name: CI for ChatBOTPFE
 
-# Trigger the workflow on pushes and pull requests to the main branch.
 on:
   push:
     branches: [ main ]
@@ -9,31 +8,43 @@ on:
 
 jobs:
   build:
-    # The job will run on the latest Ubuntu environment.
     runs-on: ubuntu-latest
 
-    # Run the job against multiple Python versions.
     strategy:
       matrix:
-        python-version: [ "3.10","3.11" ]
+        python-version: [ "3.10", "3.11" ]
 
     steps:
-      # 1. Checkout the repository code.
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. Set up Python using the matrix value.
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      # 3. Upgrade pip and install dependencies.
-      - name: Install Dependencies
+      - name: Upgrade pip and install dependencies
         run: |
-
+          
           pip install -r requirements.txt
 
-      # 4. Run the main script with a simple argument to check it executes.
+      # Install Ollama on the GitHub runner
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve &  # Run Ollama as a background process
+
+      # Wait for Ollama to start
+      - name: Check if Ollama is Running
+        run: |
+          sleep 5  # Wait a few seconds for Ollama to start
+          curl -X POST http://localhost:11434/api/tags || exit 1
+
+      # Pull the required Ollama model
+      - name: Pull Ollama Model
+        run: |
+          ollama pull phi3
+
+      # Run main application with Ollama backend
       - name: Run main.py
         run: python ./BACK/main.py --qa ./BACK/datasets/qa/qa_AssuranceAuto.json
