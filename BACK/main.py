@@ -1,6 +1,8 @@
 import argparse
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from langchain_community.llms.ollama import Ollama
 from pydantic import BaseModel
 from typing import List, Dict
@@ -49,6 +51,12 @@ class ChatRequest(BaseModel):
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@app.get("/chat-page")
+async def serve_chat_page():
+    return FileResponse("FRONT/chat.html")
+
+app.mount("/static", StaticFiles(directory="FRONT"), name="static")
 
 @app.post("/chat")
 async def chat(request: ChatRequest):

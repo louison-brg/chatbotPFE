@@ -17,7 +17,7 @@ function sendMessage() {
     chatOutput.scrollTop = chatOutput.scrollHeight;
 
     // Send message to FastAPI server at the /chat endpoint
-    fetch('http://127.0.0.1:8000/chat', {
+    fetch('/chat', {
         method: 'POST',
         mode: 'cors',
         headers: {
