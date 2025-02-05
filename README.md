@@ -71,7 +71,7 @@ ollama serve
 ```
 - Execute **LightRAG** :
 ```bash
-python ./BACK/LightRAG/lightrag_ollama.py --path ./BACK/datasets/*name_of_your_document.txt*
+python ./BACK/LightRAG/lightrag_ollama.py --path ./BACK/datasets/<name-of-your-document.txt>
 ```
 
 This will generate a Q&A .json file in `./BACK/datasets/qa/`.
@@ -88,13 +88,26 @@ ollama serve
 - Run the **FastAPI** server :
 Here you can change your Q&A just by specifying another file.
 ```bash
-python ./BACK/main.py --qa ./BACK/datasets/qa/*name_of_your_document.json*
+python ./BACK/main.py --qa ./BACK/datasets/qa/<name-of-your-document.json>
 ```
 
 - Open the frontend :
-Open `chat.html` in your browser.
+Open [http://localhost:8000/chat-page](http://localhost:8000/chat-page) in your browser.
 
-- Chat with the bot:
+#### Chat with the bot on other devices on a local network:
+Check your local ipV4 in the cmd.
+- Windows
+```bash
+ipconfig
+``` 
+- MacOS and Linux
+```bash
+ifconfig
+``` 
+Then type this address in the client browser.
+```bash
+http://<your-local-ipV4>:8000/chat-page
+``` 
 
 #### Testing the Setup:
 - **Ollama Server**: [http://localhost:11434](http://localhost:11434)  
