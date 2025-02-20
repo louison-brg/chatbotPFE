@@ -37,5 +37,6 @@ def retrieve_relevant_document(query: str, vector_store):
     """Retrieve the most similar document based on a user query."""
     results = vector_store.similarity_search(query)
     if results:
+        print("Q&A used : ",results[0].page_content)
         return results[0].page_content  # Return the most relevant document's content
     return "No relevant documents found."

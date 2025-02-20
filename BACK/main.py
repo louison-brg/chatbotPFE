@@ -68,17 +68,23 @@ async def chat(request: ChatRequest):
         raise HTTPException(status_code=400, detail="No message received")
 
     try:
+        # Append the user's message to the conversation history
+        conversation_history.append({"role": "user", "content": user_input})
+
         # Retrieve relevant FAQ entry using RAG
         faq_response = retrieve_relevant_document(user_input, vector_store)
 
-        # Combine FAQ response with user input
-        prompt_with_context = f"Context from FAQ:\n{faq_response}\n\nUser: {user_input}\nAssistant: Please answer concisely and go straight to the main point."
+        # Generate a response using the FAQ content
+        prompt_with_context = (
+            f"You are an assistant here to help users by answering questions using this context Q&A:\n{faq_response}\n\n"
+            f"User's question: {user_input}\n\n"
+            f"Assistant, based on the above context, please provide a concise, accurate, and informative response. Stay focused and on-topic."
+        )
 
         # Generate a response using the Ollama model
         response = model.invoke(prompt_with_context)
 
-        # Append the user's message and the assistant's response to the conversation history
-        conversation_history.append({"role": "user", "content": user_input})
+        # Append the assistant's response to the conversation history
         conversation_history.append({"role": "assistant", "content": response})
 
         return {"response": response}

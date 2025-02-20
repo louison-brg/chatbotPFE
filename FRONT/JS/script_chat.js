@@ -12,7 +12,7 @@ function sendMessage() {
     // Display "bot is typing" message
     const loadingMessage = document.createElement('div');
     loadingMessage.className = 'bot-loading';
-    loadingMessage.textContent = 'Chat_V1 : *typing*';
+    loadingMessage.textContent = 'Assistant : *typing*';
     chatOutput.appendChild(loadingMessage);
     chatOutput.scrollTop = chatOutput.scrollHeight;
 
@@ -38,7 +38,7 @@ function sendMessage() {
             // Find the last bot-message element and update it with the actual bot response
             let botMessages = document.querySelectorAll('.bot-loading');
             let lastBotMessage = botMessages[botMessages.length - 1]; // Get the last created bot-message
-            lastBotMessage.textContent = 'Chat_V1 : ' + data.response; // Update its content with the bot response
+            lastBotMessage.textContent = 'Assistant : ' + data.response; // Update its content with the bot response
             // Change the class from 'bot-loading' to 'bot-message' after the response is received
             lastBotMessage.classList.remove('bot-loading');  // Remove the 'bot-loading' class
             lastBotMessage.classList.add('bot-message');  // Add the 'bot-message' class to apply normal bot message styling
@@ -47,9 +47,12 @@ function sendMessage() {
         .catch(error => {
             console.error('Error:', error); // Log any errors to console
             // Find the last bot-message element and update it with an error message
-            let botMessages = document.querySelectorAll('.bot-message');
+            let botMessages = document.querySelectorAll('.bot-loading');
             let lastBotMessage = botMessages[botMessages.length - 1]; // Get the last created bot-message
-            lastBotMessage.textContent = 'Chat_V1 : Sorry, there was an error processing your request.';
+            lastBotMessage.textContent = 'Assistant : Sorry, there was an error processing your request. Please reload this page.';
+            lastBotMessage.classList.remove('bot-loading');  // Remove the 'bot-loading' class
+            lastBotMessage.classList.add('bot-message');  // Add the 'bot-message' class to apply normal bot message styling
+
         });
 
     // Reset input field
