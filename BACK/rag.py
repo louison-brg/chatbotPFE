@@ -19,8 +19,8 @@ def load_json_dataset(file_path: str):
     return documents
 
 # Initialize RAG pipeline
-def initialize_rag_pipeline(json_file_path: str, embedding_model: str = "phi3"):
-    """Set up the RAG system using Ollama embeddings and Chroma."""
+def initialize_rag_pipeline(json_file_path: str, embedding_model: str = "nomic-embed-text"):
+    """Set up the RAG system using Ollama nomic-embed-text embeddings and Chroma."""
     # Load the dataset
     documents = load_json_dataset(json_file_path)
 
