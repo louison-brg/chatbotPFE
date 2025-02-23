@@ -32,11 +32,13 @@ def initialize_rag_pipeline(json_file_path: str, embedding_model: str = "nomic-e
 
     return vector_store
 
-# Perform similarity search
 def retrieve_relevant_document(query: str, vector_store):
-    """Retrieve the most similar document based on a user query."""
+    """Retrieve the 3 most similar documents based on a user query."""
     results = vector_store.similarity_search(query)
     if results:
-        print("Q&A used : ",results[0].page_content)
-        return results[0].page_content  # Return the most relevant document's content
+        # Print the 3 most relevant documents
+        for i, result in enumerate(results[:3]):
+            print(f"Q&A {i+1} used: {result.page_content}")
+        # Return the content of the top 3 documents
+        return [result.page_content for result in results[:3]]
     return "No relevant documents found."
