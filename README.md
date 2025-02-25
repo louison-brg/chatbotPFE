@@ -76,6 +76,14 @@ python ./BACK/LightRAG/lightrag_ollama.py --path ./BACK/datasets/<name-of-your-d
 
 This will generate a Q&A .json file in `./BACK/datasets/qa/`.
 
+#### OR 
+
+You can run this command in the BACK directory in a new terminal.
+```bash
+uvicorn upload:app --host 0.0.0.0 --port 5000 --reload
+```
+Then you can directly go to the page and load your file from the browser.
+
 ### 2. **Chatbot** :
 Once you have the Q&A in .json format, you can launch your chatbot.
 

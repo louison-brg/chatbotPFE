@@ -75,6 +75,46 @@ body {
     /* Infinite fade effect */
 }
 
+.upload-container {
+    position: fixed;  
+    top: 500px;  
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;  
+    padding: 0; 
+    background: transparent; 
+    border-radius: 0; 
+    box-shadow: none;  
+    text-align: center;
+}
+
+
+.upload-container input[type="file"] {
+    display: none; /* Hide the default input */
+}
+
+.custom-file-upload {
+    background-color: #007bff; 
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3; 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+
 /* Keyframes for changing the background color */
 @keyframes fadeColor {
     0% {
