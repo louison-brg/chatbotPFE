@@ -15,6 +15,12 @@
     <iframe src="static/HTLM/background.html"></iframe>
     <!-- Bouton pour démarrer le chat -->
     <button class="start-button" role="button" id="start-button">Chat with your virtual assistant</button>
+    <!-- Conteneur pour l'upload de fichier -->
+    <div class="upload-container">
+        <label for="fileInput" class="custom-file-upload">Upload TXT or PDF File</label>
+        <input type="file" id="fileInput" accept=".txt,.pdf" style="display: none;">
+        <p id="status"></p>
+    </div>
     <!-- Conteneur principal du chat -->
     <div id="chat-container">
         <!-- Conteneur des messages -->
@@ -31,5 +37,6 @@
 </body>
 <script src="static/JS/script_chat.js"></script>
 <script src="static/JS/script_startbutton.js"></script>
+<script src="static/JS/script_uploadbutton.js"></script>
 
 </html>

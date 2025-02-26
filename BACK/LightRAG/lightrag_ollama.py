@@ -7,15 +7,21 @@ from lightrag import LightRAG, QueryParam
 from lightrag.llm import ollama_model_complete, ollama_embedding
 from lightrag.utils import EmbeddingFunc
 
-LOG_FILE = os.path.join("./BACK/LightRAG/lightrag.log")
+# Get the absolute path of the current script
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-# Configure logging to save logs in the specified directory
+# Log file path inside BACK/LightRAG
+LOG_FILE = os.path.join(BASE_DIR, "lightrag.log")
+
+# Configure logging
 logging.basicConfig(
-    filename=LOG_FILE,  # Save logs to the specified file
-    filemode="w",  # Append mode (use "a" to append on each run)
-    format="%(levelname)s:%(message)s",
+    filename=LOG_FILE,
+    filemode="w",  
+    format="%(levelname)s: %(message)s",
     level=logging.INFO
 )
+
+logging.info("LightRAG script started successfully.")
 
 # Function to compute hash of a file
 def compute_file_hash(file_path):
