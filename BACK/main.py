@@ -1,6 +1,7 @@
-import argparse
 import uvicorn
-from fastapi import FastAPI, HTTPException
+import os
+import shutil
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from langchain_community.llms.ollama import Ollama
@@ -9,25 +10,8 @@ from typing import List, Dict
 from fastapi.middleware.cors import CORSMiddleware
 from rag import initialize_rag_pipeline, retrieve_relevant_document
 
-# Parse command-line arguments for custom options
-parser = argparse.ArgumentParser(description="FastAPI Chatbot with RAG system")
-parser.add_argument(
-    "--qa",
-    type=str,
-    required=True,  # Make it required
-    help="Path to the qa to be used."
-)
-args = parser.parse_args()
-
 # Initialize the application
 app = FastAPI()
-
-# Use the --qa argument value for the JSON file path
-JSON_FILE_PATH = args.qa
-
-# Initialize the Ollama model
-MODEL = "phi3"
-model = Ollama(model=MODEL, temperature=0)
 
 # Add CORS middleware
 app.add_middleware(
@@ -38,13 +22,48 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the RAG system
-vector_store = initialize_rag_pipeline(JSON_FILE_PATH)
+# Initialize the Ollama model
+MODEL = "phi3"
+model = Ollama(model=MODEL, temperature=0)
+
+# Global variable to store the path of the selected QA file
+qa_file_path = None
 
 # Store conversation history in memory for the current session
 conversation_history: List[Dict[str, str]] = []
 
-# Define the request model
+# Endpoint to upload the .json file (used for QA)
+@app.post("/upload-file")
+async def upload_file(file: UploadFile = File(...)):
+    global qa_file_path, conversation_history
+
+    try:
+        # Create a folder to store uploaded files if it doesn't exist
+        upload_dir = './uploaded_files'
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+
+        # Save the uploaded file to the specified location
+        file_location = os.path.join(upload_dir, file.filename)
+        
+        with open(file_location, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        qa_file_path = file_location  # Store the path to the uploaded file
+
+        # Initialize the RAG system with the uploaded file
+        global vector_store
+        vector_store = initialize_rag_pipeline(qa_file_path)
+
+        # Reset conversation history when a new file is uploaded
+        conversation_history = []  # Clear the conversation history
+
+        return {"message": "File uploaded successfully", "filePath": file_location}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error uploading file: {str(e)}")
+
+# Define the request model for chat
 class ChatRequest(BaseModel):
     message: str
 
@@ -56,13 +75,17 @@ async def root():
 async def serve_chat_page():
     return FileResponse("FRONT/chat.html")
 
+# Serve static files
 app.mount("/static", StaticFiles(directory="FRONT"), name="static")
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
     global conversation_history  # Use a global variable for the session's conversation history
 
-    user_input = request.message.strip()  # Ensure no leading/trailing spaces
+    if not qa_file_path:
+        raise HTTPException(status_code=400, detail="QA file is not uploaded yet")
+
+    user_input = request.message.strip()
 
     if not user_input:
         raise HTTPException(status_code=400, detail="No message received")

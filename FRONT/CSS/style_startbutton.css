@@ -23,7 +23,14 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  pointer-events: auto;
 }
+
+.hidden {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
 
 .start-button:focus {
   color: #171e29;

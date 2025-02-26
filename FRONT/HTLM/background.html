@@ -1,5 +1,3 @@
-<!-- https://codepen.io/kevinjannis/pen/DbOzJd -->
-<!-- https://www.patreon.com/posts/css-rocket-77699501 -->
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -17,89 +15,22 @@
             position: relative;
         }
 
-        .loader {
-            position: relative;
-            width: 120px;
-            height: 120px;
-        }
-
-        .loader span {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform: rotate(calc(18deg * var(--i)));
-        }
-
-        .loader span::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 12px;
-            height: 12px;
-            background: #050505;
-            border-radius: 50%;
-            animation: animate 4s linear infinite;
-            animation-delay: calc(0.2s * var(--i));
-        }
-
-        @keyframes animate {
-            0% {
-                transform: scale(0);
-            }
-
-            10% {
-                transform: scale(1.2);
-            }
-
-            80%,
-            100% {
-                transform: scale(0);
-            }
-        }
-
-        .rocket {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            animation: rotate 4s linear infinite;
-            animation-delay: -2s;
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(10deg);
-            }
-
-            100% {
-                transform: rotate(370deg);
-            }
-        }
-
-        .rocket::before {
-            content: '\f072';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 80px;
-            left: 85px;
-            color: #050505;
-            font-size: 50px;
-            transform: rotate(130deg);
-        }
-
-        /* Logique des nuages */
         @keyframes clouds {
             0% {
-                left: -100%;
+                left: -5%;
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+
+            95% {
+                opacity: 1;
             }
 
             100% {
-                left: 120%;
+                left: 100%;
+                opacity: 0;
             }
         }
 
@@ -122,7 +53,7 @@
             bottom: 0;
             background: #fafbf0;
             box-shadow: inset -2px -3px 0 0 #f7e7eb;
-            z-index: 10;
+            z-index: 0;
         }
 
         .cloud div:first-child+div {
@@ -161,76 +92,76 @@
 
         /* Définition des nuages */
         .cloud-1 {
-            animation-duration: 263s;
-            margin-left: 5%;
-            top: 30%;
+            animation-duration: 80s;
+            animation-delay: 0s;
+            /* Start in middle of animation */
+            top: 45%;
         }
 
         .cloud-2 {
-            animation-duration: 99s;
-            margin-left: 20%;
-            top: 10%;
+            animation-duration: 80s;
+            animation-delay:    -50s;
+            /* Start at beginning */
+            top: 80%;
         }
 
         .cloud-3 {
-            animation-duration: 142s;
-            margin-left: 35%;
-            top: 50%;
+            animation-duration: 60s;
+            animation-delay: -45s;
+            /* Start halfway */
+            top: 10%;
         }
 
         .cloud-4 {
-            animation-duration: 152s;
-            margin-left: 50%;
+            animation-duration: 60s;
+            animation-delay: -10s;
+            /* Start near end */
             top: 70%;
         }
 
         .cloud-5 {
-            animation-duration: 215s;
-            margin-left: 65%;
-            top: 25%;
+            animation-duration: 60s;
+            animation-delay: -25s;
+            /* Start at 30% */
+            top: 50%;
         }
 
         .cloud-6 {
-            animation-duration: 139s;
-            margin-left: 75%;
+            animation-duration: 50s;
+            animation-delay: -5s;
+            /* Start near beginning */
             top: 15%;
         }
 
         .cloud-7 {
-            animation-duration: 109s;
-            margin-left: 85%;
-            top: 60%;
+            animation-duration: 50s;
+            animation-delay: -10s;
+            /* Start at 80% */
+            top: 30%;
         }
 
         .cloud-8 {
-            animation-duration: 121s;
-            margin-left: 95%;
-            top: 40%;
+            animation-duration: 50s;
+            animation-delay: -35s;
+            /* Start at middle */
+            top: 35%;
         }
 
         .cloud-9 {
-            animation-duration: 101s;
-            margin-left: 10%;
-            top: 20%;
+            animation-duration: 40s;
+            animation-delay: -30s;
+            /* Start at 60% */
+            top: 60%;
         }
 
         .cloud-10 {
-            animation-duration: 126s;
-            margin-left: 12%;
-            top: 55%;
+            animation-duration: 40s;
+            animation-delay: -8s;
+            /* Start at 25% */
+            top: 90%;
         }
 
-        .cloud-11 {
-            animation-duration: 96s;
-            margin-left: 30%;
-            top: 75%;
-        }
 
-        .cloud-12 {
-            animation-duration: 83s;
-            margin-left: 40%;
-            top: 45%;
-        }
 
         #title {
             position: absolute;
@@ -238,6 +169,7 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
+            z-index: 1;
         }
 
         #title h1 {
@@ -256,8 +188,11 @@
 
 <body>
     <div id="title">
-        <h1>Ollama ChatBot V1</h1>
-        <h2>example on planes' Q&A</h2>
+        <h1>ChatbotPFE</h1>
+        <h2>Chat with your personal AI assistant, which can access selected Q&As from your documents.</h2>
+        <h2>In the menu, you can create your own Q&A and choose which Q&As the bot can use.</h2>
+        <h2>You can also upload a file (PDF or TXT) to automatically generate a new Q&A.</h2>
+
     </div>
     <!-- Nuages -->
     <div class="cloud large cloud-1">
@@ -266,31 +201,31 @@
         <div></div>
         <div></div>
     </div>
-    <div class="cloud normal cloud-2">
+    <div class="cloud large cloud-2">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="cloud small cloud-3">
+    <div class="cloud normal cloud-3">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="cloud tiny cloud-4">
+    <div class="cloud normal cloud-4">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="cloud large cloud-5">
+    <div class="cloud normal cloud-5">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="cloud normal cloud-6">
+    <div class="cloud small cloud-6">
         <div></div>
         <div></div>
         <div></div>
@@ -302,58 +237,23 @@
         <div></div>
         <div></div>
     </div>
-    <div class="cloud tiny cloud-8">
+    <div class="cloud small cloud-8">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="cloud small cloud-9">
+    <div class="cloud tiny cloud-9">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div class="cloud normal cloud-10">
+    <div class="cloud tiny cloud-10">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
-    </div>
-    <div class="cloud tiny cloud-11">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-    <div class="cloud small cloud-12">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-    <div class="loader">
-        <span style="--i:1;"></span>
-        <span style="--i:2;"></span>
-        <span style="--i:3;"></span>
-        <span style="--i:4;"></span>
-        <span style="--i:5;"></span>
-        <span style="--i:6;"></span>
-        <span style="--i:7;"></span>
-        <span style="--i:8;"></span>
-        <span style="--i:9;"></span>
-        <span style="--i:10;"></span>
-        <span style="--i:11;"></span>
-        <span style="--i:12;"></span>
-        <span style="--i:13;"></span>
-        <span style="--i:14;"></span>
-        <span style="--i:15;"></span>
-        <span style="--i:16;"></span>
-        <span style="--i:17;"></span>
-        <span style="--i:18;"></span>
-        <span style="--i:19;"></span>
-        <span style="--i:20;"></span>
-        <div class="rocket"></div>
     </div>
 </body>
 
