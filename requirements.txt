@@ -24,5 +24,5 @@ transformers==4.48.1
 tiktoken==0.8.0
 nano_vectordb==0.0.4.3
 pyvis==0.3.2
-
+numpy==1.26.4
 
