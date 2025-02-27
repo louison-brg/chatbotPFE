@@ -1,9 +1,36 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const fileInput = document.getElementById("fileInput");
+// Function to create the file input and handle the upload
+function initializeFileUpload() {
+    // Create the upload container dynamically
+    const uploadContainer = document.createElement('div');
+    uploadContainer.classList.add('upload-container');
+    uploadContainer.id = 'upload-container';
 
-    fileInput.addEventListener("change", async () => {
+    // Create the file input element
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'fileUpload';
+    fileInput.accept = '.txt,.pdf';
+
+    // Create the status message element
+    const statusMessage = document.createElement('p');
+    statusMessage.id = 'statusUpload';
+    statusMessage.style.fontWeight = 'bold'; // Matching style
+
+    // Append the file input and status message to the container
+    uploadContainer.appendChild(fileInput);
+    uploadContainer.appendChild(statusMessage);
+
+    // Append the upload container to the body (or another container you choose)
+    document.body.appendChild(uploadContainer);
+
+    // Trigger the hidden file input click
+    fileInput.click();
+
+    // Handle file input change
+    fileInput.addEventListener('change', async () => {
         if (fileInput.files.length === 0) {
-            console.log("No file selected.");
+            // No file selected
+            statusMessage.textContent = 'No file selected';
             return;
         }
 
@@ -13,7 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData();
         formData.append("file", file);
 
-        document.getElementById("status").textContent = "Uploading...";
+        // Show status message indicating upload is in progress
+        statusMessage.textContent = 'Uploading...';
 
         try {
             const response = await fetch("http://127.0.0.1:5000/upload", {
@@ -25,13 +53,23 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Server Response:", result);
 
             if (response.ok) {
-                document.getElementById("status").textContent = "Upload successful!";
+                // Upload successful
+                statusMessage.style.color = 'green';
+                statusMessage.textContent = file.name + ' uploaded successfully!';
             } else {
-                document.getElementById("status").textContent = "Error: " + result.message;
+                // Handle non-200 HTTP responses
+                statusMessage.style.color = 'red';
+                statusMessage.textContent = 'Error: ' + result.message || 'Unknown error';
             }
         } catch (error) {
             console.error("Upload failed:", error);
-            document.getElementById("status").textContent = "Upload failed. Check console.";
+            statusMessage.style.color = 'red';
+            statusMessage.textContent = 'Upload failed. Check console.';
         }
+
+        // Hide the status message after 3 seconds
+        setTimeout(() => {
+            statusMessage.textContent = '';
+        }, 3000); // Hide after 3 seconds
     });
-});
+}

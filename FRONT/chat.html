@@ -4,39 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface Chatbot test01</title>
+    <title>ChatBotPFE</title>
     <link rel="stylesheet" href="static/CSS/style_chat.css">
-    <link rel="stylesheet" href="static/CSS/style_statbutton.css">
+    <link rel="stylesheet" href="static/CSS/style_startbutton.css">
+    <link rel="stylesheet" href="static/CSS/style_menu.css">
+    <link rel="icon" href="/static/images/chatboticon.png" type="image/x-icon">
 
 </head>
 
 <body>
-    <!-- iframe qui contient l'animation de l'avion -->
+    <!-- iframe qui contient le fond  -->
     <iframe src="static/HTLM/background.html"></iframe>
+
+    <!-- Menu -->
+    <div class="container" onclick="toggleMenu()">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+    <!-- Menu options -->
+    <div id="menu-options" class="menu-options">
+        <button class="menu-option" id="option1">Choose Q&A for the Bot</button>
+        <button class="menu-option" id="option2">Create a new Q&A</button>
+    </div>
+
     <!-- Bouton pour démarrer le chat -->
-    <button class="start-button" role="button" id="start-button">Chat with your virtual assistant</button>
-    <!-- Conteneur pour l'upload de fichier -->
-    <div class="upload-container">
-        <label for="fileInput" class="custom-file-upload">Upload TXT or PDF File</label>
-        <input type="file" id="fileInput" accept=".txt,.pdf" style="display: none;">
-        <p id="status"></p>
-    </div>
-    <!-- Conteneur principal du chat -->
-    <div id="chat-container">
-        <!-- Conteneur des messages -->
-        <div id="chat-output">
-            <!-- Les messages du bot et de l'utilisateur seront insérés ici -->
-            <div class="bot-message" id="first-message">Assistant : Hello, I am your personal assistant. Please provide me with your question.</div>
-        </div>
-        <!-- Champ d'entrée pour l'utilisateur -->
-        <div id="chat-input">
-            <input type="text" id="user-input" placeholder="Type here...">
-            <button id="send_button">Send</button>
-        </div>
-    </div>
+    <button class="start-button hidden" role="button" id="start-button">Chat with your virtual assistant</button>
+
 </body>
 <script src="static/JS/script_chat.js"></script>
-<script src="static/JS/script_startbutton.js"></script>
 <script src="static/JS/script_uploadbutton.js"></script>
+<script src="static/JS/script_choseqa.js"></script>
+<script src="static/JS/script_startbutton.js"></script>
+<script src="static/JS/script_menu.js"></script>
 
 </html>

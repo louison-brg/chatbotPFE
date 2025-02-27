@@ -25,4 +25,6 @@ tiktoken==0.8.0
 nano_vectordb==0.0.4.3
 pyvis==0.3.2
 numpy==1.26.4
+pdfminer==20191125
+pdfminer.six==20240706
 
