@@ -59,48 +59,26 @@ ollama pull nomic-embed-text
 
 ## Run :
 
-### 1. **LightRAG** :
-Here we want to use an unstructured text file (.txt) to generate Q&A ().json), which will then be used by our Chatbot in the **RAG** system.
-
-If you already have a .json file with your Q&A, you can skip this step.
-
-- Download a text file (.txt) and save it in `./BACK/datasets/`
-- Start the **Ollama** server :
-```bash
-ollama serve
-```
-- Execute **LightRAG** :
-```bash
-python ./BACK/LightRAG/lightrag_ollama.py --path ./BACK/datasets/<name-of-your-document.txt>
-```
-
-This will generate a Q&A .json file in `./BACK/datasets/qa/`.
-
-#### OR 
-
-You can run this command in the BACK directory in a new terminal.
-```bash
-uvicorn upload:app --host 0.0.0.0 --port 5000 --reload
-```
-Then you can directly go to the page and load your file from the browser.
-
-### 2. **Chatbot** :
+### 1. **Chatbot** :
 Once you have the Q&A in .json format, you can launch your chatbot.
 
 - Run **Ollama** server:
-If the server has stopped, launch it again:
+Launch the server :
 ```bash
 ollama serve
 ```
 
 - Run the **FastAPI** server :
-Here you can change your Q&A just by specifying another file.
+Start the main.py
 ```bash
-python ./BACK/main.py --qa ./BACK/datasets/qa/<name-of-your-document.json>
+python ./BACK/main.py
 ```
 
 - Open the frontend :
 Open [http://localhost:8000/chat-page](http://localhost:8000/chat-page) in your browser.
+
+### 2. **How to use** :
+Follow the instruction on the main page in order to use your own RAG.
 
 #### Chat with the bot on other devices on a local network:
 Check your local ipV4 in the cmd.

@@ -20,7 +20,7 @@ function initializeFileUpload() {
     uploadContainer.appendChild(fileInput);
     uploadContainer.appendChild(statusMessage);
 
-    // Append the upload container to the body (or another container you choose)
+    // Append the upload container to the body
     document.body.appendChild(uploadContainer);
 
     // Trigger the hidden file input click
