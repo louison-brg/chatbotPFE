@@ -24,12 +24,22 @@ def allowed_file(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def generate_qa_json(txt_filename: str):
-    """ Convertit un fichier .txt en JSON Q&A avec LightRAG """
+    """ Convertit un fichier .txt en JSON Q&A avec LightRAG, puis supprime les fichiers sources """
     json_filename = txt_filename.replace(".txt", ".json")
     json_path = os.path.join(QA_FOLDER, json_filename)
+    txt_path = os.path.join(UPLOAD_FOLDER, txt_filename)
+    pdf_filename = txt_filename.replace(".txt", ".pdf")
+    pdf_path = os.path.join(UPLOAD_FOLDER, pdf_filename)
 
     if os.path.exists(json_path):
         print(f"{json_filename} existe déjà. Pas besoin de le recréer.")
+        # Cleanup original files if they exist
+        if os.path.exists(txt_path):
+            os.remove(txt_path)
+            print(f"Deleted original TXT file: {txt_filename}")
+        if os.path.exists(pdf_path):
+            os.remove(pdf_path)
+            print(f"Deleted original PDF file: {pdf_filename}")
         return json_filename
 
     print(f"Génération du Q&A JSON pour {txt_filename}...")
@@ -39,7 +49,7 @@ def generate_qa_json(txt_filename: str):
         return None
 
     process = subprocess.run(
-        ["python", LIGHTRAG_SCRIPT, "--path", os.path.join(UPLOAD_FOLDER, txt_filename)],
+        ["python", LIGHTRAG_SCRIPT, "--path", txt_path],
         cwd=LIGHTRAG_DIR,  # Ensure correct working directory
         capture_output=True,
         text=True
@@ -50,6 +60,13 @@ def generate_qa_json(txt_filename: str):
 
     if process.returncode == 0:
         print(f"Fichier Q&A généré: {json_filename}")
+        # Delete original files after successful JSON creation
+        if os.path.exists(txt_path):
+            os.remove(txt_path)
+            print(f"Deleted original TXT file: {txt_filename}")
+        if os.path.exists(pdf_path):
+            os.remove(pdf_path)
+            print(f"Deleted original PDF file: {pdf_filename}")
         return json_filename
     else:
         print(f"Erreur lors de la génération du fichier Q&A: {process.stderr}")

@@ -1,6 +1,8 @@
 import uvicorn
 import os
 import shutil
+import subprocess
+import atexit
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -39,7 +41,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     try:
         # Create a folder to store uploaded files if it doesn't exist
-        upload_dir = './uploaded_files'
+        upload_dir = './BACK/datasets/qa'
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
 
@@ -120,6 +122,22 @@ async def chat(request: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-# Start the app with uvicorn
+def start_upload_server():
+    """Launch the upload FastAPI server as a background subprocess."""
+    
+    return subprocess.Popen(
+        ["uvicorn", "BACK.upload:app", "--host", "127.0.0.1", "--port", "5000", "--reload"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
 if __name__ == "__main__":
+    # Start the upload server in the background.
+    upload_server_process = start_upload_server()
+    print("Upload server started on port 5000.")
+
+    # Register cleanup to terminate the upload server when main process exits.
+    atexit.register(lambda: upload_server_process.terminate())
+
+    # Start the main FastAPI server.
     uvicorn.run(app, host="0.0.0.0", port=8000)
