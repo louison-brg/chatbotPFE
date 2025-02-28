@@ -1,6 +1,5 @@
 // Function to initialize the chat interface after Q&A selection
 function initiateChat() {
-
     // Create the new chat container
     const chatContainer = document.createElement('div');
     chatContainer.id = 'chat-container';
@@ -14,7 +13,7 @@ function initiateChat() {
     const firstMessage = document.createElement('div');
     firstMessage.classList.add('bot-message');
     firstMessage.id = 'first-message';
-    firstMessage.textContent = 'Assistant : Hello, I am your personal assistant. Please provide me with your question.';
+    firstMessage.textContent = 'Assistant: Hello, I am your personal assistant. Please provide me with your question.';
     chatOutput.appendChild(firstMessage);
 
     // Create the chat input container
@@ -27,13 +26,21 @@ function initiateChat() {
     userInput.id = 'user-input';
     userInput.placeholder = 'Type here...';
 
+    // Create the microphone toggle button
+    const micButton = document.createElement('button');
+    micButton.classList.add('mic-toggle');
+    micButton.id = 'mic';
+    micButton.innerHTML = '<span class="material-icons">mic</span>'; // Mic icon
+
     // Create the send button
     const sendButton = document.createElement('button');
-    sendButton.id = 'send_button';
-    sendButton.textContent = 'Send';
+    sendButton.classList.add('send-button');
+    sendButton.id = 'send';
+    sendButton.innerHTML = '<span class="material-icons">send</span>'; // Send icon
 
-    // Append the input and button to the chat input container
+    // Append the input field, mic button, and send button to the chat input container
     chatInput.appendChild(userInput);
+    chatInput.appendChild(micButton);
     chatInput.appendChild(sendButton);
 
     // Append the chat input container to the main chat container
@@ -59,21 +66,98 @@ function initiateChat() {
 
 // Setup chat - Add the necessary event listeners or functionality for chat
 function setupChat() {
-    // This would be where you set up the chat functionality, like sending messages.
-    const sendButton = document.getElementById('send_button');
-    sendButton.addEventListener('click', sendMessage);
-
     const userInput = document.getElementById('user-input');
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
-            sendMessage(); // Call the send function
+            sendMessage(userInput.value); // Call the send function
         }
+    });
+
+    // Handle the microphone button to start/stop recording
+    const micButton = document.getElementById('mic');
+    micButton.addEventListener('click', toggleRecording);
+
+    // Handle the send button to send message
+    const sendButton = document.getElementById('send');
+    sendButton.addEventListener('click', () => {
+        sendMessage(userInput.value); // Call sendMessage when the send button is clicked
     });
 }
 
-// Function to send a message (same as you already had in your code)
-function sendMessage() {
-    let userInput = document.getElementById('user-input').value;
+// Track the recording state and recorder
+let isRecording = false;
+let mediaRecorder;
+let audioBlob;
+
+// Toggle between start and stop recording
+function toggleRecording() {
+    const micButton = document.getElementById('mic');
+
+    if (isRecording) {
+        stopRecording();
+        micButton.innerHTML = '<span class="material-icons">mic</span>'; // Reset to mic icon
+    } else {
+        startRecording();
+        micButton.innerHTML = '<span class="material-icons">stop</span>'; // Change to stop icon
+    }
+
+    isRecording = !isRecording;
+}
+
+// Function to start recording the audio
+function startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = (event) => {
+                audioBlob = event.data;
+            };
+            mediaRecorder.onstop = () => {
+                // Send the audio file to the server for transcription once recording is stopped
+                sendAudioToServer(audioBlob);
+            };
+
+            // Start recording
+            mediaRecorder.start();
+            console.log("Recording started");
+        })
+        .catch(error => {
+            console.error("Error accessing microphone: ", error);
+        });
+}
+
+// Function to stop recording
+function stopRecording() {
+    mediaRecorder.stop();
+    console.log("Recording stopped");
+}
+
+// Function to send audio to server for transcription
+function sendAudioToServer(audioBlob) {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'recorded_audio.ogg');  // Attach the recorded audio as a file
+
+    fetch('/transcribe', {  // Call the new endpoint '/transcribe' for audio transcription
+        method: 'POST',
+        body: formData,  // Send the form data which includes the audio file
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.transcription) {
+                // Send transcribed text to the chatbot as if it's the user's input
+                document.getElementById('user-input').value = data.transcription;  // Set the transcription in the input field
+                sendMessage(data.transcription);  // Call sendMessage to send the transcription as user input
+            } else {
+                console.error('Transcription failed', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error while sending audio for transcription:', error);
+        });
+}
+
+// Function to send a message
+function sendMessage(userInput) {
     if (userInput.trim() === '') return; // Ensure there's input
 
     // Display user message
@@ -99,36 +183,23 @@ function sendMessage() {
         },
         body: JSON.stringify({ message: userInput })
     })
-    .then(response => {
-        if (!response.ok) {
-            console.error('Error response status:', response.status);
-            return response.json().then(errData => {
-                throw new Error('Network response was not ok: ' + JSON.stringify(errData));
-            });
-        }
-        return response.json(); // Parse the JSON from the response
-    })
-    .then(data => {
-        // Find the last bot-message element and update it with the actual bot response
-        let botMessages = document.querySelectorAll('.bot-loading');
-        let lastBotMessage = botMessages[botMessages.length - 1]; // Get the last created bot-message
-        lastBotMessage.textContent = 'Assistant : ' + data.response; // Update its content with the bot response
-        // Change the class from 'bot-loading' to 'bot-message' after the response is received
-        lastBotMessage.classList.remove('bot-loading');  // Remove the 'bot-loading' class
-        lastBotMessage.classList.add('bot-message');  // Add the 'bot-message' class to apply normal bot message styling
-
-    })
-    .catch(error => {
-        console.error('Error:', error); // Log any errors to console
-        // Find the last bot-message element and update it with an error message
-        let botMessages = document.querySelectorAll('.bot-loading');
-        let lastBotMessage = botMessages[botMessages.length - 1]; // Get the last created bot-message
-        lastBotMessage.textContent = 'Assistant : Sorry, there was an error processing your request. Please reload this page.';
-        lastBotMessage.classList.remove('bot-loading');  // Remove the 'bot-loading' class
-        lastBotMessage.classList.add('bot-message');  // Add the 'bot-message' class to apply normal bot message styling
-
-    });
+        .then(response => response.json())
+        .then(data => {
+            let botMessages = document.querySelectorAll('.bot-loading');
+            let lastBotMessage = botMessages[botMessages.length - 1];
+            lastBotMessage.textContent = 'Assistant : ' + data.response;
+            lastBotMessage.classList.remove('bot-loading');
+            lastBotMessage.classList.add('bot-message');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            let botMessages = document.querySelectorAll('.bot-loading');
+            let lastBotMessage = botMessages[botMessages.length - 1];
+            lastBotMessage.textContent = 'Assistant : Sorry, there was an error processing your request.';
+            lastBotMessage.classList.remove('bot-loading');
+            lastBotMessage.classList.add('bot-message');
+        });
 
     // Reset input field
-    document.getElementById('user-input').value = ''; // Clear input field
+    document.getElementById('user-input').value = '';  // Clear input field
 }
