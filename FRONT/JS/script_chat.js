@@ -89,7 +89,7 @@ let isRecording = false;
 let mediaRecorder;
 let audioBlob;
 
-// Toggle between start and stop recording
+// Update the toggleRecording function to handle the audio display
 function toggleRecording() {
     const micButton = document.getElementById('mic');
 
@@ -132,7 +132,7 @@ function stopRecording() {
     console.log("Recording stopped");
 }
 
-// Function to send audio to server for transcription
+// Function to send the audio blob and its transcription to the server
 function sendAudioToServer(audioBlob) {
     const formData = new FormData();
     formData.append('audio', audioBlob, 'recorded_audio.ogg');  // Attach the recorded audio as a file
@@ -145,8 +145,7 @@ function sendAudioToServer(audioBlob) {
         .then(data => {
             if (data.transcription) {
                 // Send transcribed text to the chatbot as if it's the user's input
-                document.getElementById('user-input').value = data.transcription;  // Set the transcription in the input field
-                sendMessage(data.transcription);  // Call sendMessage to send the transcription as user input
+                sendTranscriptionToBot(data.transcription);  // Call sendTranscriptionToBot to send the transcription
             } else {
                 console.error('Transcription failed', data);
             }
@@ -156,23 +155,35 @@ function sendAudioToServer(audioBlob) {
         });
 }
 
-// Function to send a message
-function sendMessage(userInput) {
-    if (userInput.trim() === '') return; // Ensure there's input
-
-    // Display user message
+// Function to display user message
+function displayUserMessage(userInput) {
     let chatOutput = document.getElementById('chat-output');
     let userMessage = document.createElement('div');
     userMessage.className = 'user-message';
     userMessage.textContent = 'You : ' + userInput;
     chatOutput.appendChild(userMessage);
+    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
+}
 
-    // Display "bot is typing" message
+// Function to display "Bot is typing" message
+function displayBotTyping() {
+    let chatOutput = document.getElementById('chat-output');
     const loadingMessage = document.createElement('div');
     loadingMessage.className = 'bot-loading';
-    loadingMessage.textContent = 'Assistant : *typing*';
+    loadingMessage.textContent = 'Assistant: *typing*';
     chatOutput.appendChild(loadingMessage);
-    chatOutput.scrollTop = chatOutput.scrollHeight;
+    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
+}
+
+// Function to send a message
+function sendMessage(userInput) {
+    if (userInput.trim() === '') return; // Ensure there's input
+
+    // Display user message
+    displayUserMessage(userInput);
+
+    // Display "bot is typing" message
+    displayBotTyping();
 
     // Send message to FastAPI server at the /chat endpoint
     fetch('/chat', {
@@ -187,7 +198,7 @@ function sendMessage(userInput) {
         .then(data => {
             let botMessages = document.querySelectorAll('.bot-loading');
             let lastBotMessage = botMessages[botMessages.length - 1];
-            lastBotMessage.textContent = 'Assistant : ' + data.response;
+            lastBotMessage.textContent = 'Assistant: ' + data.response;
             lastBotMessage.classList.remove('bot-loading');
             lastBotMessage.classList.add('bot-message');
         })
@@ -195,7 +206,64 @@ function sendMessage(userInput) {
             console.error('Error:', error);
             let botMessages = document.querySelectorAll('.bot-loading');
             let lastBotMessage = botMessages[botMessages.length - 1];
-            lastBotMessage.textContent = 'Assistant : Sorry, there was an error processing your request.';
+            lastBotMessage.textContent = 'Assistant: Sorry, there was an error processing your request.';
+            lastBotMessage.classList.remove('bot-loading');
+            lastBotMessage.classList.add('bot-message');
+        });
+
+    // Reset input field
+    document.getElementById('user-input').value = '';  // Clear input field
+}
+
+// Function to display user audio message
+function displayUserAudio(audioBlob) {
+    let chatOutput = document.getElementById('chat-output');
+    let userAudioMessage = document.createElement('div');
+    userAudioMessage.className = 'user-audio-message';
+
+    // Create an audio player to play the recorded audio
+    const audioPlayer = document.createElement('audio');
+    audioPlayer.controls = true;
+    audioPlayer.src = URL.createObjectURL(audioBlob);  // Use the recorded blob as the audio source
+
+    // Add the audio player to the chat
+    userAudioMessage.appendChild(audioPlayer);
+    chatOutput.appendChild(userAudioMessage);
+    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
+}
+
+// Function to send the transcription of user audio to the bot
+function sendTranscriptionToBot(transcription) {
+    if (transcription.trim() === '') return; // Ensure there's input
+
+    // Display the user audio message instead of text
+    displayUserAudio(audioBlob);
+
+    // Display "bot is typing" message
+    displayBotTyping();
+
+    // Send transcription (not the audio) to FastAPI server at the /chat endpoint
+    fetch('/chat', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: transcription })
+    })
+        .then(response => response.json())
+        .then(data => {
+            let botMessages = document.querySelectorAll('.bot-loading');
+            let lastBotMessage = botMessages[botMessages.length - 1];
+            lastBotMessage.textContent = 'Assistant: ' + data.response;
+            lastBotMessage.classList.remove('bot-loading');
+            lastBotMessage.classList.add('bot-message');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            let botMessages = document.querySelectorAll('.bot-loading');
+            let lastBotMessage = botMessages[botMessages.length - 1];
+            lastBotMessage.textContent = 'Assistant: Sorry, there was an error processing your request.';
             lastBotMessage.classList.remove('bot-loading');
             lastBotMessage.classList.add('bot-message');
         });
