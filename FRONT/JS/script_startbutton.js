@@ -4,6 +4,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     startChatButton.addEventListener("click", () => {
         initiateChat();
-        startChatButton.style.display = "none";
     });
 });

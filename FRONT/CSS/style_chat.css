@@ -18,9 +18,9 @@ body {
 /* Conteneur principal du chat */
 #chat-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 700px; /* Increased width */
     height: 0;
-    max-height: 500px;
+    max-height: 700px; /* Increased height */
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -35,12 +35,50 @@ body {
     transition: height 8s ease, opacity 0.5s ease;
 }
 
+/* Close button */
+#close-chat {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#close-chat:hover {
+    color: #ff4d4d;
+}
+
 /* Conteneur des messages du chatbot */
 #chat-output {
     flex: 1;
-    padding: 10px;
+    padding: 20px; /* Added padding */
     overflow-y: auto;
     background-color: #fafafa;
+    padding-right: 30px; /* Prevent scrollbar overlap */
+}
+
+/* Style de la barre de défilement */
+#chat-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-output::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid #fff; /* Adds border to thumb */
+}
+
+#chat-output::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+#chat-output::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
 }
 
 /* Messages de l'utilisateur */
@@ -51,7 +89,7 @@ body {
     background-color: #d1e7ff;
     border-radius: 10px;
     align-self: flex-end;
-    text-align: justify
+    text-align: justify;
 }
 
 /* Messages du bot */
@@ -61,9 +99,10 @@ body {
     background-color: #e0e0e0;
     border-radius: 10px;
     align-self: flex-start;
-    text-align: justify
+    text-align: justify;
 }
 
+/* Messages de chargement du bot */
 .bot-loading {
     margin: 10px 0;
     padding: 10px;
@@ -72,29 +111,41 @@ body {
     align-self: flex-start;
     text-align: justify;
     animation: fadeColor 3s ease-in-out infinite;
-    /* Infinite fade effect */
 }
 
+/* Animation de changement de couleur */
+@keyframes fadeColor {
+    0% {
+        background-color: #e0e0e0;
+    }
+    50% {
+        background-color: #fafafa;
+    }
+    100% {
+        background-color: #e0e0e0;
+    }
+}
+
+/* Conteneur d'upload de fichier */
 .upload-container {
-    position: fixed;  
-    top: 500px;  
+    position: fixed;
+    top: 500px;
     left: 50%;
     transform: translateX(-50%);
-    width: auto;  
-    padding: 0; 
-    background: transparent; 
-    border-radius: 0; 
-    box-shadow: none;  
+    width: auto;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
     text-align: center;
 }
 
-
 .upload-container input[type="file"] {
-    display: none; /* Hide the default input */
+    display: none;
 }
 
 .custom-file-upload {
-    background-color: #007bff; 
+    background-color: #007bff;
     color: white;
     font-weight: bold;
     border: none;
@@ -110,30 +161,11 @@ body {
 }
 
 .custom-file-upload:hover {
-    background-color: #0056b3; 
+    background-color: #0056b3;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-
-/* Keyframes for changing the background color */
-@keyframes fadeColor {
-    0% {
-        background-color: #e0e0e0;
-        /* Start at light gray */
-    }
-
-    50% {
-        background-color: #fafafa;
-        /* Midway, change to white */
-    }
-
-    100% {
-        background-color: #e0e0e0;
-        /* End back at light gray */
-    }
-}
-
-/* Chat input container */
+/* Conteneur du champ de saisie */
 #chat-input {
     display: flex;
     justify-content: space-between;
@@ -142,11 +174,11 @@ body {
     background-color: #eee;
     border-top: 1px solid #ccc;
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
     position: relative;
 }
 
-/* Input field */
+/* Champ de saisie */
 #user-input {
     flex: 1;
     padding: 10px;
@@ -156,11 +188,11 @@ body {
     font-size: 16px;
     background-color: #fff;
     box-sizing: border-box;
-    width: 70%; 
+    width: 70%;
     margin-right: 10px;
-    text-align: left;
 }
-/* Send button */
+
+/* Bouton envoyer */
 #send {
     background-color: #007bff;
     color: white;
@@ -186,68 +218,59 @@ body {
     background-color: #003f7f;
 }
 
-/* Mic toggle button */
+/* Bouton de microphone */
 .mic-toggle {
     position: absolute;
-    right: 65px; /* Adjust position from the right */
+    right: 65px;
     display: block;
-    width: 2rem; /* Slightly larger for better click area */
-    height: 2rem; 
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
-    border: 2px solid #e74c3c; /* Softer red border */
-    background-color: #e74c3c; /* Softer red background */
+    border: 2px solid #e74c3c;
+    background-color: #e74c3c;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    box-sizing: border-box; /* Ensure border doesn't affect size */
+    box-sizing: border-box;
 }
 
 .mic-toggle span {
     font-size: 1.2rem;
-    color: #ffffff; /* White icon */
+    color: #ffffff;
 }
 
-/* Hover effect: scale up and subtle background color change */
 .mic-toggle:hover {
-    transform: scale(1.05); /* Slightly increase size on hover, within the button */
-    background-color: rgba(231, 76, 60, 0.8); /* Slightly lighter red on hover */
+    transform: scale(1.05);
+    background-color: rgba(231, 76, 60, 0.8);
 }
 
-/* Recording state */
 .mic-toggle.is-recording {
-    background-color: #c0392b; /* Darker red when recording */
-    box-shadow: 0 0 10px rgba(192, 57, 43, 0.6); /* More prominent shadow when recording */
+    background-color: #c0392b;
+    box-shadow: 0 0 10px rgba(192, 57, 43, 0.6);
 }
 
-/* Change icon color when recording */
 .mic-toggle.is-recording span {
-    color: #fff; /* White icon when recording */
+    color: #fff;
 }
 
-/* Active state (when the button is pressed) */
-.mic-toggle:active {
-    background-color: rgba(231, 76, 60, 0.9); /* Darker red on click */
-}
-
-/* Background expansion animation (limited to button size) */
+/* Animation de fond pour l'expansion */
 .mic-toggle:before,
 .mic-toggle:after {
     content: '';
     display: block;
     position: absolute;
     z-index: 0;
-    background-color: rgba(231, 76, 60, 0.3); /* Lighter red background */
+    background-color: rgba(231, 76, 60, 0.3);
     top: -0.2rem;
     left: -0.2rem;
     right: -0.2rem;
     bottom: -0.2rem;
     border-radius: 50%;
-    transition: all 0.3s ease-in-out; /* Smooth transition for expanding background */
+    transition: all 0.3s ease-in-out;
 }
 
-/* Hover effect for background expansion */
 .mic-toggle:hover:before {
     top: -0.3rem;
     left: -0.3rem;
@@ -255,12 +278,12 @@ body {
     bottom: -0.3rem;
 }
 
-/* Responsive mic and send button on small screens */
+/* Responsivité - Ajustements pour les petits écrans */
 @media (max-width: 600px) {
-    .mic-toggle {
-        right: 10px;
-        width: 1.5rem;
-        height: 1.5rem;
+    #chat-container {
+        width: 90%;
+        right: 5%;
+        bottom: 10px;
     }
 
     #send {
@@ -270,77 +293,42 @@ body {
     }
 }
 
-
-/*Background*/
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Responsivité - ajustements pour les petits écrans */
-@media (max-width: 600px) {
-    #chat-container {
-        width: 90%;
-        right: 5%;
-        bottom: 10px;
-    }
-
-    #user-input {
-        font-size: 14px;
-    }
-
-    button {
-        padding: 10px;
-        font-size: 14px;
-    }
-}
-
+/* Style pour le fichier audio */
 audio {
     display: block;
     width: 80%;
     margin: 10px 0;
     margin-left: 20%;
-    background: #d1e7ff; /* Light blue background */
+    background: #d1e7ff;
     padding: 10px;
     border-radius: 10px;
     align-self: flex-end;
     outline: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Style the default controls for a sleek look */
+/* Style des contrôles du lecteur audio */
 audio::-webkit-media-controls-panel {
     background-color: #d1e7ff;
     border-radius: 10px;
 }
 
-/* Make buttons pop */
 audio::-webkit-media-controls-play-button,
 audio::-webkit-media-controls-pause-button,
 audio::-webkit-media-controls-mute-button {
     filter: invert(1);
 }
 
-/* Style the timeline progress bar */
 audio::-webkit-media-controls-timeline {
     background-color: #b0d4ff;
     border-radius: 5px;
 }
 
-/* Style the volume control */
 audio::-webkit-media-controls-volume-slider {
     background-color: #b0d4ff;
     border-radius: 5px;
 }
 
-/* Ensure the audio is aligned similarly to messages */
 .user-message audio {
     text-align: right;
 }

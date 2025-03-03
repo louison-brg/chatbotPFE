@@ -23,7 +23,7 @@ function displayUserMessage(userInput) {
     let chatOutput = document.getElementById('chat-output');
     let userMessage = document.createElement('div');
     userMessage.className = 'user-message';
-    userMessage.textContent = 'You : ' + userInput;
+    userMessage.textContent = userInput;
     chatOutput.appendChild(userMessage);
     chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
 }

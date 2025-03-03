@@ -1,8 +1,24 @@
 // Function to initialize the chat interface after Q&A selection
 function initiateChat() {
+    // Check if the chat container already exists
+    const existingChatContainer = document.getElementById('chat-container');
+    if (existingChatContainer) {
+        // If the chat container exists, just open it and return
+        openChat();
+        return;
+    }
+
     // Create the new chat container
     const chatContainer = document.createElement('div');
     chatContainer.id = 'chat-container';
+
+    // Create the close button
+    const closeButton = document.createElement('button');
+    closeButton.id = 'close-chat';
+    closeButton.innerHTML = '&times;'; // Cross symbol
+
+    // Add close button to chat container
+    chatContainer.appendChild(closeButton);
 
     // Create the chat output container
     const chatOutput = document.createElement('div');
@@ -30,13 +46,13 @@ function initiateChat() {
     const micButton = document.createElement('button');
     micButton.classList.add('mic-toggle');
     micButton.id = 'mic';
-    micButton.innerHTML = '<span class="material-icons">mic</span>'; // Mic icon
+    micButton.innerHTML = '<span class="material-icons">mic</span>';
 
     // Create the send button
     const sendButton = document.createElement('button');
     sendButton.classList.add('send-button');
     sendButton.id = 'send';
-    sendButton.innerHTML = '<span class="material-icons">send</span>'; // Send icon
+    sendButton.innerHTML = '<span class="material-icons">send</span>';
 
     // Append the input field, mic button, and send button to the chat input container
     chatInput.appendChild(userInput);
@@ -50,18 +66,53 @@ function initiateChat() {
     document.body.appendChild(chatContainer);
 
     // Initially set height and opacity to trigger the animation
-    chatContainer.style.height = '0';  // Initially collapsed
-    chatContainer.style.opacity = '0';  // Initially invisible
+    chatContainer.style.height = '0';  
+    chatContainer.style.opacity = '0';  
 
-    // Delay the transition by setting styles after the container is appended to DOM
-    setTimeout(() => {
-        chatContainer.style.transition = 'height 0.8s ease, opacity 0.5s ease';  // Ensure transition is applied
-        chatContainer.style.height = '60%';  // Increase the height
-        chatContainer.style.opacity = '1';  // Fade in
-    }, 10);  // 10ms delay to allow the DOM to register the element
+    // Close chat on close button click using the closeChat function
+    closeButton.addEventListener('click', closeChat);
 
-    // Now you can initialize your chat (perhaps add event listeners, etc.)
+    // Open the chat container using the openChat function
+    openChat();
+
+    // Initialize chat setup
     setupChat();
+}
+
+// Function to open the chat with an animation
+function openChat() {
+    const chatContainer = document.getElementById('chat-container');
+    const startChatButton = document.getElementById("start-button");
+    startChatButton.style.display = "none";
+    if (chatContainer) {
+        // Initially set height and opacity to trigger the animation
+        chatContainer.style.height = '0';  
+        chatContainer.style.opacity = '0';
+        chatContainer.style.display = "flex";  
+
+        // Show the chat after a small delay to trigger the transition
+        setTimeout(() => {
+            chatContainer.style.transition = 'height 0.8s ease, opacity 0.5s ease';
+            chatContainer.style.height = '60%';  // Set desired height
+            chatContainer.style.opacity = '1';   // Fade in
+        }, 10);
+    }
+}
+
+// Function to close the chat with an animation
+function closeChat() {
+    const chatContainer = document.getElementById('chat-container');
+    const startChatButton = document.getElementById("start-button");
+    startChatButton.style.display = "flex";
+    if (chatContainer) {
+        chatContainer.style.transition = 'height 0.5s ease, opacity 0.5s ease';
+        chatContainer.style.height = '0';  // Collapse height to 0
+        chatContainer.style.opacity = '0'; // Fade out
+        setTimeout(() => {
+            chatContainer.style.display = "none"; 
+        }, 500);
+    }
+    
 }
 
 // Call the function to request permission and initialize chat

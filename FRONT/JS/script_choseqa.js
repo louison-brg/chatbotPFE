@@ -29,14 +29,11 @@ function handleChooseQA() {
     // Remove the old chat container if it exists
     const oldChatContainer = document.getElementById("chat-container");
     if (oldChatContainer) {
-        oldChatContainer.style.transition = 'height 0.8s ease, opacity 0.8s ease'; // Same transition as opening
-        oldChatContainer.style.height = '0';  // Collapse height to 0
-        oldChatContainer.style.opacity = '0'; // Fade out
-
+        closeChat();
         // Wait for the animation to finish before removing the element
         setTimeout(() => {
-            oldChatContainer.remove(); // Remove the chat container after the animation
-        }, 800); // Delay corresponds to the animation duration (0.8s for height and 0.5s for opacity)
+            document.body.removeChild(oldChatContainer);  // Remove chat container after animation
+        }, 500);  // Matches the animation time
     }
     
     const startChatButton = document.getElementById("start-button");
