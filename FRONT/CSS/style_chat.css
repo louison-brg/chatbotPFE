@@ -301,3 +301,46 @@ iframe {
         font-size: 14px;
     }
 }
+
+audio {
+    display: block;
+    width: 80%;
+    margin: 10px 0;
+    margin-left: 20%;
+    background: #d1e7ff; /* Light blue background */
+    padding: 10px;
+    border-radius: 10px;
+    align-self: flex-end;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Style the default controls for a sleek look */
+audio::-webkit-media-controls-panel {
+    background-color: #d1e7ff;
+    border-radius: 10px;
+}
+
+/* Make buttons pop */
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button,
+audio::-webkit-media-controls-mute-button {
+    filter: invert(1);
+}
+
+/* Style the timeline progress bar */
+audio::-webkit-media-controls-timeline {
+    background-color: #b0d4ff;
+    border-radius: 5px;
+}
+
+/* Style the volume control */
+audio::-webkit-media-controls-volume-slider {
+    background-color: #b0d4ff;
+    border-radius: 5px;
+}
+
+/* Ensure the audio is aligned similarly to messages */
+.user-message audio {
+    text-align: right;
+}
