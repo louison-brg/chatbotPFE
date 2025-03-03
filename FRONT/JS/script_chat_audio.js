@@ -117,9 +117,6 @@ function displayUserAudio(audioBlob) {
     chatOutput.appendChild(audioContainer);
     chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
 
-    // Send the audio to the server for transcription
-    sendAudioToServer(audioBlob, transcriptButton, transcriptMessage);
-
     // Toggle visibility of audio and transcript
     transcriptButton.onclick = () => {
         const audioElement = document.getElementById(audioPlayer.id);
@@ -154,26 +151,12 @@ function displayBotListening() {
     chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
 }
 
-// Function to remove any "bot-loading" message (either listening or typing)
-function removeBotLoading() {
-    const loadingMessage = document.getElementById('bot-listening');
-    if (loadingMessage) {
-        loadingMessage.remove(); // Remove the "listening" message
-    }
-
-    const typingMessage = document.getElementById('bot-typing');
-    if (typingMessage) {
-        typingMessage.remove(); // Remove the "typing" message if it exists
-    }
-}
-
 // Function to send the transcription of user audio to the bot
 function sendTranscriptionToBot(transcription) {
     if (transcription.trim() === '') return; // Ensure there's input
 
-    // Remove the "listening" message and show the "typing" message
-    removeBotLoading();
-    displayBotTyping();
+    // Replace the "listening" message with "typing" message
+    replaceListeningWithTyping();
 
     // Send transcription (not the audio) to FastAPI server at the /chat endpoint
     fetch('/chat', {
@@ -186,21 +169,38 @@ function sendTranscriptionToBot(transcription) {
     })
         .then(response => response.json())
         .then(data => {
-            let botMessages = document.querySelectorAll('.bot-loading');
-            let lastBotMessage = botMessages[botMessages.length - 1];
-            lastBotMessage.textContent = 'Assistant: ' + data.response;
-            lastBotMessage.classList.remove('bot-loading');
-            lastBotMessage.classList.add('bot-message');
+            // Remove the "typing" message and add the bot's response
+            removeBotTyping();
+            displayBotResponse(data.response);
         })
         .catch(error => {
             console.error('Error:', error);
-            let botMessages = document.querySelectorAll('.bot-loading');
-            let lastBotMessage = botMessages[botMessages.length - 1];
-            lastBotMessage.textContent = 'Assistant: Sorry, there was an error processing your request.';
-            lastBotMessage.classList.remove('bot-loading');
-            lastBotMessage.classList.add('bot-message');
+
+            // Remove the "typing" message and show an error message
+            removeBotTyping();
+            displayBotResponse('Sorry, there was an error processing your request.');
         });
 
     // Reset input field
     document.getElementById('user-input').value = '';  // Clear input field
+}
+
+// Function to replace "listening" message with "typing"
+function replaceListeningWithTyping() {
+    const listeningMessage = document.getElementById('bot-listening');
+    if (listeningMessage) {
+        listeningMessage.textContent = 'Assistant: *typing*';  // Replace the "listening" message with "typing"
+        listeningMessage.id = 'bot-typing';
+    }
+}
+
+// Function to display "Bot is listening" message
+function displayBotListening() {
+    let chatOutput = document.getElementById('chat-output');
+    const loadingMessage = document.createElement('div');
+    loadingMessage.className = 'bot-loading';
+    loadingMessage.id = 'bot-listening';  // Set an ID for easy removal/update
+    loadingMessage.textContent = 'Assistant: *listening*';
+    chatOutput.appendChild(loadingMessage);
+    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
 }
