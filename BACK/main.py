@@ -3,6 +3,7 @@ import os
 import shutil
 import subprocess
 import atexit
+import whisper
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -27,6 +28,9 @@ app.add_middleware(
 # Initialize the Ollama model
 MODEL = "phi3"
 model = Ollama(model=MODEL, temperature=0)
+
+# Load Whisper model for STT
+whisper_model = whisper.load_model("small.en")  
 
 # Global variable to store the path of the selected QA file
 qa_file_path = None
@@ -130,7 +134,32 @@ def start_upload_server():
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
+    
+@app.post("/transcribe")
+async def transcribe_audio(audio: UploadFile = File(...)):
+    try:
+        # Save the incoming file temporarily
+        file_location = f"temp_audio/{audio.filename}"
+        
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+        
+        with open(file_location, "wb") as f:
+            f.write(await audio.read())
 
+        # Use Whisper to transcribe the audio file
+        result = whisper_model.transcribe(file_location)
+        transcription = result["text"]
+
+        return {"transcription": transcription}
+
+    except Exception as e:
+        # Log the error to the console for debugging
+        print(f"Error during transcription: {str(e)}")
+        
+        # Provide a more detailed response in case of an error
+        raise HTTPException(status_code=500, detail=f"Error transcribing audio: {str(e)}")
+    
 if __name__ == "__main__":
     # Start the upload server in the background.
     upload_server_process = start_upload_server()

@@ -133,36 +133,143 @@ body {
     }
 }
 
-/* Conteneur de l'entrée utilisateur */
+/* Chat input container */
 #chat-input {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
     background-color: #eee;
     border-top: 1px solid #ccc;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
 }
 
-/* Champ texte pour l'utilisateur */
+/* Input field */
 #user-input {
     flex: 1;
     padding: 10px;
+    padding-right: 40px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+    box-sizing: border-box;
+    width: 70%; 
+    margin-right: 10px;
+    text-align: left;
 }
-
-/* Bouton pour envoyer le message */
-#send_button {
-    margin-left: 10px;
-    padding: 10px 20px;
+/* Send button */
+#send {
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 20px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
 }
 
-#send_button:hover {
+#send:hover {
     background-color: #0056b3;
+    transform: scale(1.1);
 }
+
+#send:active {
+    background-color: #003f7f;
+}
+
+/* Mic toggle button */
+.mic-toggle {
+    position: absolute;
+    right: 65px; /* Adjust position from the right */
+    display: block;
+    width: 2rem; /* Slightly larger for better click area */
+    height: 2rem; 
+    border-radius: 50%;
+    border: 2px solid #e74c3c; /* Softer red border */
+    background-color: #e74c3c; /* Softer red background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Ensure border doesn't affect size */
+}
+
+.mic-toggle span {
+    font-size: 1.2rem;
+    color: #ffffff; /* White icon */
+}
+
+/* Hover effect: scale up and subtle background color change */
+.mic-toggle:hover {
+    transform: scale(1.05); /* Slightly increase size on hover, within the button */
+    background-color: rgba(231, 76, 60, 0.8); /* Slightly lighter red on hover */
+}
+
+/* Recording state */
+.mic-toggle.is-recording {
+    background-color: #c0392b; /* Darker red when recording */
+    box-shadow: 0 0 10px rgba(192, 57, 43, 0.6); /* More prominent shadow when recording */
+}
+
+/* Change icon color when recording */
+.mic-toggle.is-recording span {
+    color: #fff; /* White icon when recording */
+}
+
+/* Active state (when the button is pressed) */
+.mic-toggle:active {
+    background-color: rgba(231, 76, 60, 0.9); /* Darker red on click */
+}
+
+/* Background expansion animation (limited to button size) */
+.mic-toggle:before,
+.mic-toggle:after {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: 0;
+    background-color: rgba(231, 76, 60, 0.3); /* Lighter red background */
+    top: -0.2rem;
+    left: -0.2rem;
+    right: -0.2rem;
+    bottom: -0.2rem;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out; /* Smooth transition for expanding background */
+}
+
+/* Hover effect for background expansion */
+.mic-toggle:hover:before {
+    top: -0.3rem;
+    left: -0.3rem;
+    right: -0.3rem;
+    bottom: -0.3rem;
+}
+
+/* Responsive mic and send button on small screens */
+@media (max-width: 600px) {
+    .mic-toggle {
+        right: 10px;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    #send {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+}
+
 
 /*Background*/
 iframe {
@@ -193,4 +300,47 @@ iframe {
         padding: 10px;
         font-size: 14px;
     }
+}
+
+audio {
+    display: block;
+    width: 80%;
+    margin: 10px 0;
+    margin-left: 20%;
+    background: #d1e7ff; /* Light blue background */
+    padding: 10px;
+    border-radius: 10px;
+    align-self: flex-end;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Style the default controls for a sleek look */
+audio::-webkit-media-controls-panel {
+    background-color: #d1e7ff;
+    border-radius: 10px;
+}
+
+/* Make buttons pop */
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button,
+audio::-webkit-media-controls-mute-button {
+    filter: invert(1);
+}
+
+/* Style the timeline progress bar */
+audio::-webkit-media-controls-timeline {
+    background-color: #b0d4ff;
+    border-radius: 5px;
+}
+
+/* Style the volume control */
+audio::-webkit-media-controls-volume-slider {
+    background-color: #b0d4ff;
+    border-radius: 5px;
+}
+
+/* Ensure the audio is aligned similarly to messages */
+.user-message audio {
+    text-align: right;
 }

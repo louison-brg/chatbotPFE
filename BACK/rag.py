@@ -1,7 +1,7 @@
 import json
 from langchain.schema import Document
 from langchain_ollama import OllamaEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 
 # Load the JSON dataset (JSONL format)
 def load_json_dataset(file_path: str):
