@@ -4,8 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies: Python, pip, curl, ffmpeg, etc.
 RUN apt-get update && apt-get install -y \
-    python \
-    python-pip \
+    python3 \
+    python3-pip \
     curl \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
@@ -19,8 +19,8 @@ WORKDIR /app
 # Copy all project files into the container
 COPY . .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies using pip3
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Expose the required ports:
 # - Ollama API: 11434
