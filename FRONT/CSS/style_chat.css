@@ -293,21 +293,79 @@ body {
     }
 }
 
-/* Style pour le fichier audio */
-audio {
-    display: block;
-    width: 80%;
-    margin: 10px 0;
+/* Style for the audio container */
+.audio-container {
+    display: flex;
+    width: 100%;  /* Make it the same width as the chat output */
+    border-radius: 10px;
+    align-items: center;
+    position: relative;
+    margin-top: 10px;
+    justify-content: flex-start; /* Align everything to the left */
+    height: 54px;
+}
+
+/* Style for the transcript button */
+.transcript-button {
+    position: absolute;
+    left: 6%; /* Align the button to the left of the container */
+    top: 50%; /* Vertically center the button */
+    transform: translateY(-50%);
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;  /* Make the icon larger */
+    z-index: 10;
+    transition: color 0.3s ease; /* Smooth transition for color change */
+    background-color: #fafafa;
+}
+
+/* Initially hide the transcript button until the transcription is ready */
+.transcript-button.hidden {
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* Hover state for the transcript button */
+.transcript-button.transcript-visible:hover{
+    color: red;
+}
+
+.transcript-button:hover{
+    color: green;
+}
+
+
+.material-icons {
+    font-size: 24px; /* Adjust the icon size to your preference */
+}
+
+
+/* Style for the transcript message */
+.transcript-message {
+    display: none;  /* Hidden initially */
+    padding: 10px;
+    background-color: #d1e7ff;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    text-align: justify; /* Align the text the same way as .user-message */
+    width: 80%; /* Adjust the width based on your design */
     margin-left: 20%;
+    font-style: italic;
+}
+
+/* Style for the audio player */
+audio {
+    display: block;  /* Initially visible */
+    width: 80%;  /* Full width of the container */
     background: #d1e7ff;
     padding: 10px;
     border-radius: 10px;
-    align-self: flex-end;
     outline: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 20%; /* Align audio to the same starting position as .user-message */
 }
 
-/* Style des contrôles du lecteur audio */
+/* Ensuring transcript and audio align */
 audio::-webkit-media-controls-panel {
     background-color: #d1e7ff;
     border-radius: 10px;
@@ -329,6 +387,3 @@ audio::-webkit-media-controls-volume-slider {
     border-radius: 5px;
 }
 
-.user-message audio {
-    text-align: right;
-}

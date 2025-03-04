@@ -60,21 +60,33 @@ function sendMessage(userInput) {
     })
         .then(response => response.json())
         .then(data => {
-            let botMessages = document.querySelectorAll('.bot-loading');
-            let lastBotMessage = botMessages[botMessages.length - 1];
-            lastBotMessage.textContent = 'Assistant: ' + data.response;
-            lastBotMessage.classList.remove('bot-loading');
-            lastBotMessage.classList.add('bot-message');
+            removeBotTyping();
+            displayBotResponse(data.response);
         })
         .catch(error => {
-            console.error('Error:', error);
-            let botMessages = document.querySelectorAll('.bot-loading');
-            let lastBotMessage = botMessages[botMessages.length - 1];
-            lastBotMessage.textContent = 'Assistant: Sorry, there was an error processing your request.';
-            lastBotMessage.classList.remove('bot-loading');
-            lastBotMessage.classList.add('bot-message');
+            // Remove the "typing" message and show an error message
+            removeBotTyping();
+            displayBotResponse('Sorry, there was an error processing your request.');
         });
 
     // Reset input field
     document.getElementById('user-input').value = '';  // Clear input field
+}
+
+// Function to display the bot's response
+function displayBotResponse(responseText) {
+    let chatOutput = document.getElementById('chat-output');
+    const responseMessage = document.createElement('div');
+    responseMessage.className = 'bot-message';
+    responseMessage.textContent = 'Assistant: ' + responseText;
+    chatOutput.appendChild(responseMessage);
+    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to the bottom
+}
+
+// Function to remove the "typing" message
+function removeBotTyping() {
+    const typingMessage = document.getElementById('bot-typing');
+    if (typingMessage) {
+        typingMessage.remove(); // Remove the "typing" message
+    }
 }
