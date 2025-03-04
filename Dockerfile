@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     git \
     curl \
+    rustc \
+    cargo \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
