@@ -1,5 +1,5 @@
 fastapi==0.115.5
-langchain_community==0.3.7
+git+https://github.com/langchain-ai/langchain.git@v0.3.7#egg=langchain
 annotated-types==0.7.0
 anyio==4.5.2
 certifi==2024.8.30
