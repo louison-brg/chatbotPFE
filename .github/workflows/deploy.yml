@@ -13,6 +13,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11.10'
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -27,7 +32,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t chatbotpfe .
-          docker tag chatbotpfe:latest <your-account-id>.dkr.ecr.us-east-1.amazonaws.com/chatbotpfe:latest
+          docker tag chatbotpfe:latest 739275483313.dkr.ecr.eu-west-3.amazonaws.com/chatbotpfe:latest
 
       - name: Push Docker Image to ECR
         run: |
