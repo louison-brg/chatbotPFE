@@ -20,7 +20,7 @@ chromadb==0.5.23
 aioboto3==13.4.0
 torch==2.4.1
 openai==1.60.0
-transformers==4.48.1
+transformers==4.32.1
 tiktoken==0.8.0
 nano_vectordb==0.0.4.3
 pyvis==0.3.2
