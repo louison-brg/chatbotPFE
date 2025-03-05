@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
 
+# Ensure Ollama binds to 0.0.0.0
+export OLLAMA_HOST=0.0.0.0
+
 echo "Starting Ollama server on port 11434..."
-# Start Ollama server with external binding
-ollama serve --host 0.0.0.0 &
+
+ollama serve &
 OLLAMA_PID=$!
 
 # Wait for Ollama to initialize
@@ -17,5 +20,5 @@ ollama pull nomic-embed-text
 echo "Starting main FastAPI server (which also starts the upload server)..."
 python ./BACK/main.py
 
-# Keep the script running (optional)
+# Keep the script running
 wait
