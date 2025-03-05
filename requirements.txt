@@ -22,7 +22,7 @@ torch==2.4.1
 openai==1.60.0
 transformers==4.32.1
 tiktoken==0.7.0
-nano_vectordb==0.0.4.3
+nano_vectordb
 pyvis==0.3.2
 numpy==1.26.4
 pdfminer==20191125
