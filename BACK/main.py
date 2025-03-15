@@ -130,7 +130,7 @@ def start_upload_server():
     """Launch the upload FastAPI server as a background subprocess."""
     
     return subprocess.Popen(
-        ["uvicorn", "BACK.upload:app", "--host", "127.0.0.1", "--port", "5000", "--reload"],
+        ["uvicorn", "BACK.upload2:app", "--host", "127.0.0.1", "--port", "5000", "--reload"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
