@@ -12,6 +12,7 @@ from pydantic import BaseModel
 from typing import List, Dict
 from fastapi.middleware.cors import CORSMiddleware
 from rag import initialize_rag_pipeline, retrieve_relevant_document
+from upload2 import write_status, clear_log_file
 
 # Initialize the application
 app = FastAPI()
@@ -38,36 +39,32 @@ qa_file_path = None
 # Store conversation history in memory for the current session
 conversation_history: List[Dict[str, str]] = []
 
-# Endpoint to upload the .json file (used for QA)
+# Folder to store uploaded QA files
+UPLOAD_DIR = './BACK/datasets/qa'
+
 @app.post("/upload-file")
 async def upload_file(file: UploadFile = File(...)):
-    global qa_file_path, conversation_history
+    global qa_file_path, conversation_history, vector_store
 
     try:
-        # Create a folder to store uploaded files if it doesn't exist
-        upload_dir = './BACK/datasets/qa'
-        if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir)
-
+        write_status(f"Uploading ...")
         # Save the uploaded file to the specified location
-        file_location = os.path.join(upload_dir, file.filename)
-        
+        file_location = os.path.join(UPLOAD_DIR, file.filename)
         with open(file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-
         qa_file_path = file_location  # Store the path to the uploaded file
-
+        # Log the upload status
+        write_status(f"File uploaded successfully: {file.filename}")
         # Initialize the RAG system with the uploaded file
-        global vector_store
         vector_store = initialize_rag_pipeline(qa_file_path)
-
         # Reset conversation history when a new file is uploaded
         conversation_history = []  # Clear the conversation history
-
-        return {"message": "File uploaded successfully", "filePath": file_location}
-
+        return 0
+    
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error uploading file: {str(e)}")
+        error_message = f"Error uploading file: {str(e)}"
+        write_status(error_message)  # Log the error
+        raise HTTPException(status_code=500, detail=error_message)
 
 # Define the request model for chat
 class ChatRequest(BaseModel):
@@ -161,9 +158,9 @@ async def transcribe_audio(audio: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Error transcribing audio: {str(e)}")
     
 if __name__ == "__main__":
+    clear_log_file()
     # Start the upload server in the background.
     upload_server_process = start_upload_server()
-    print("Upload server started on port 5000.")
 
     # Register cleanup to terminate the upload server when main process exits.
     atexit.register(lambda: upload_server_process.terminate())
