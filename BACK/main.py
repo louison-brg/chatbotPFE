@@ -101,8 +101,10 @@ async def chat(request: ChatRequest):
         faq_response = retrieve_relevant_document(user_input, vector_store)
 
         # Generate a response using the FAQ content
+        conversation_history_str = "\n".join([f"{entry['role']}: {entry['content']}" for entry in conversation_history])
         prompt_with_context = (
             f"You are an assistant here to help users by answering questions using this context Q&A:\n{faq_response}\n\n"
+            f"Conversation history:\n{conversation_history_str}\n\n"
             f"User's question: {user_input}\n\n"
             f"Assistant, based on the above context, please provide a concise, accurate, and informative response. "
             f"You have access to several Q&A entries, but you do not need to use all of them. Select only the most relevant information to answer the user's question.\n"

@@ -145,31 +145,31 @@ phi3_response = model.invoke(phi3_prompt)
 import json
 import os
 
-# Récupérer le nom du document depuis le chemin
-document_name = os.path.basename(document_path).split('.')[0]  # Supprime l'extension du fichier
+# Retrieve the document name from the path
+document_name = os.path.basename(document_path).split('.')[0]  # Remove the file extension
 
-# Définir le chemin du fichier de sortie
+# Define the output file path
 qa_dir = os.path.join(os.path.dirname(document_path), "qa")
-os.makedirs(qa_dir, exist_ok=True)  # Crée le dossier si inexistant
+os.makedirs(qa_dir, exist_ok=True)  # Create the folder if it doesn't exist
 
 qa_file_path = os.path.join(qa_dir, f"qa_{document_name}.json")
 
-# Transformer la réponse du chatbot en format JSON
+# Transform the chatbot response into JSON format
 qa_pairs = []
 for line in phi3_response.strip().split("\n"):
     if line.startswith("Q:") or line.startswith("A:"):
         qa_pairs.append(line.strip())
 
-# Regrouper en objets JSON
+# Group into JSON objects
 qa_data = []
-for i in range(0, len(qa_pairs), 2):  # Parcourt les paires (Q, A)
+for i in range(0, len(qa_pairs), 2):  # Iterate over pairs (Q, A)
     if i + 1 < len(qa_pairs):
         qa_data.append({"prompt": f"{qa_pairs[i]}\n{qa_pairs[i+1]}"})
 
-# Sauvegarder en fichier JSON
+# Save as JSON file
 with open(qa_file_path, "w", encoding="utf-8") as f:
     for entry in qa_data:
         json.dump(entry, f, ensure_ascii=False)
-        f.write("\n")  # Ajoute une nouvelle ligne entre les objets JSON
+        f.write("\n")  # Add a new line between JSON objects
 
 print(f"Q&A saved to: {qa_file_path}")
