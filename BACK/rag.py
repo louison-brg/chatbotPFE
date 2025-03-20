@@ -33,8 +33,8 @@ def initialize_rag_pipeline(json_file_path: str, embedding_model: str = "nomic-e
     return vector_store
 
 def retrieve_relevant_document(query: str, vector_store):
-    """Retrieve the 2 most similar documents based on a user query."""
+    """Retrieve the 3 most similar documents based on a user query."""
     results = vector_store.similarity_search(query)
     if results:
-        return [result.page_content for result in results[:2]]
+        return [result.page_content for result in results[:3]]
     return "No relevant documents found."

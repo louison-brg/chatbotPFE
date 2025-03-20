@@ -1,3 +1,4 @@
+#This script uses "LightRAG"
 import os
 import subprocess
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks

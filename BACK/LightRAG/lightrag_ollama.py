@@ -49,7 +49,7 @@ if not os.path.exists(document_path):
     raise FileNotFoundError(f"The specified file does not exist: {document_path}")
 
 # Working directory for LightRAG
-WORKING_DIR = "./BACK/LightRAG/dickens"
+WORKING_DIR = "dickens"
 if not os.path.exists(WORKING_DIR):
     os.makedirs(WORKING_DIR)
 

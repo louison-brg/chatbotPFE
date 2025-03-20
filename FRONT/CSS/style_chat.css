@@ -129,7 +129,7 @@ body {
 /* Conteneur d'upload de fichier */
 .upload-container {
     position: fixed;
-    top: 500px;
+    top: 220px;
     left: 50%;
     transform: translateX(-50%);
     width: auto;
