@@ -4,6 +4,8 @@ This guide will walk you through the setup process for the ChatbotPFE project. Y
 
 ___
 
+[![Demonstration Video](https://drive.google.com/thumbnail?id=1umnWB7yB8Jd50RmelQnJUBm_Lox-S47O)](https://drive.google.com/file/d/1umnWB7yB8Jd50RmelQnJUBm_Lox-S47O/view?usp=sharing)
+
 ## **Features**:
 
 - **Chat with your personal AI assistant**:  
